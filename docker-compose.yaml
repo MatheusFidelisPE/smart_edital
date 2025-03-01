@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  edital:
+    build: ./edital-service/
+    container_name: edital_service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_EDITAL_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_EDITAL_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_EDITAL_PASSWORD}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      
+  db:
+    image: postgres:13
+    container_name: edital_db
+    environment:
+      POSTGRES_USER: ${POSTGRES_EDITAL_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_EDITAL_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_EDITAL_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
