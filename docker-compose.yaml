@@ -1,28 +1,48 @@
 version: '3.8'
 
 services:
+  eureka: 
+    build: ./eureka-sd/
+    container_name: eureka
+    ports:
+      - "8761:8761"
+    volumes:
+      - gradle_cache_eureka:/root/.gradle
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+ 
   edital:
     build: ./edital-service/
     container_name: edital_service
-    ports:
-      - "8080:8080"
+    #ports:
+    #  - "8080:8080"
     depends_on:
-      - edital_db
+      eureka:
+        condition: service_healthy
+      edital_db:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_EDITAL_URL}
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_EDITAL_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_EDITAL_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     volumes:
+      - eureka-sd
       - gradle_cache_edital:/root/.gradle
 
   pesq_empre:
     build: ./pesquisador-empreendedor/
     container_name: pesq_empr_service
-    ports:
-      - "8081:8080"
+    #ports:
+      #- "8081:8080"
     depends_on:
-      - pesquisador_empreendedor_db
+      eureka:
+        condition: service_healthy
+      pesquisador_empreendedor_db:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_PESQUISADOR_EMPREENDEDOR_URL}
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_PESQUISADOR_EMPREENDEDOR_USERNAME}
@@ -66,3 +86,4 @@ volumes:
   postgres_data_pesq:
   gradle_cache_edital:
   gradle_cache_pesq:
+  gradle_cache_eureka:
