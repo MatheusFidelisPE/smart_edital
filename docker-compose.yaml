@@ -1,6 +1,14 @@
 version: '3.8'
 
 services:
+  gateway: 
+    build: ./gateway/
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      eureka:
+        condition: service_healthy
   eureka: 
     build: ./eureka-sd/
     container_name: eureka
@@ -80,6 +88,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
 
 volumes:
   postgres_data_edital:
