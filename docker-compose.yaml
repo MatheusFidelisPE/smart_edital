@@ -21,12 +21,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
- 
+  llmcommunication:
+    build: ./llmcommunication/
+    container_name: llmcommunication
+    depends_on:
+      eureka:
+        condition: service_healthy
+    environment:
+      - CHAVE_API_GEMINI=${CHAVE_API_GEMINI}
+    volumes:
+      - gradle_cache_llm:/root/.gradle
+
   edital:
     build: ./edital-service/
     container_name: edital_service
-    #ports:
-    #  - "8080:8080"
     depends_on:
       eureka:
         condition: service_healthy
@@ -44,8 +52,6 @@ services:
   pesq_empre:
     build: ./pesquisador-empreendedor/
     container_name: pesq_empr_service
-    #ports:
-      #- "8081:8080"
     depends_on:
       eureka:
         condition: service_healthy
@@ -96,3 +102,4 @@ volumes:
   gradle_cache_edital:
   gradle_cache_pesq:
   gradle_cache_eureka:
+  gradle_cache_llm:
