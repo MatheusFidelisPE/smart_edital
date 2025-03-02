@@ -5,6 +5,12 @@ Para garantir o funcionamento correto da aplicação, é necessário definir alg
 ## Configurações no .env
 No arquivo `.env`, defina as seguintes variáveis com os valores apropriados para o seu ambiente:
 
+## Rodando na máquina:
+- É preciso alterar os endereços dos containers no arquivo `application.properties` para `localhost`
+- É preciso alterar o endereço do banco de dados no arquivo `application.properties` para `localhost`
+
+## Rodando através do docker-compose
+
 ```ini
 POSTGRES_EDITAL_USER=<seu_usuario>
 POSTGRES_EDITAL_PASSWORD=<sua_senha>
@@ -21,6 +27,8 @@ POSTGRES_PESQUISADOR_EMPREENDEDOR_DB=<seu_banco>
 SPRING_DATASOURCE_PESQUISADOR_EMPREENDEDOR_URL=<sua_url_de_conexao>
 SPRING_DATASOURCE_PESQUISADOR_EMPREENDEDOR_USERNAME=<seu_usuario>
 SPRING_DATASOURCE_PESQUISADOR_EMPREENDEDOR_PASSWORD=<sua_senha>
+
+CHAVE_API_GEMINI=<sua_chave_de_api_do_google_gemini>
 
 ```
 
