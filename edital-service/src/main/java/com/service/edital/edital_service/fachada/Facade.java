@@ -2,6 +2,7 @@ package com.service.edital.edital_service.fachada;
 
 import com.service.edital.edital_service.controller.EditalController;
 import com.service.edital.edital_service.dto.EditalDTO;
+import jakarta.ws.rs.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
@@ -42,5 +43,10 @@ public class Facade {
     public List<EditalDTO> getAllEditais() {
         return controllerEdital.getAllEditais().orElseThrow();
 
+    }
+
+    public EditalDTO getEditalByTitleAndAgency(String title, String agency) throws NotFoundException {
+        Optional<EditalDTO> edital = controllerEdital.getEditalByTitleAndAgency(title, agency);
+        return edital.get();
     }
 }

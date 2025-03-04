@@ -3,23 +3,16 @@ package com.service.edital.edital_service.controller;
 import com.service.edital.edital_service.dto.EditalDTO;
 import com.service.edital.edital_service.model.Edital;
 import com.service.edital.edital_service.repository.EditalRepository;
-import jakarta.annotation.Resources;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -38,15 +31,21 @@ public class EditalController {
     }
 
     public Optional<?> createEdital(EditalDTO dto, MultipartFile pdf) throws IOException {
+        String path = String.format("%s_%s", dto.title(), dto.agency());
+        path = path.replaceAll(" ", "-");
+
         Edital edital = new Edital().builder()
                 .title(dto.title())
+                .agency(dto.agency())
                 .description(dto.description())
-                .pathToPdfFile("")
+                .pathToPdfFile(path)
+                .publicationDate(dto.publicationDate())
+                .closingDate(dto.closingDate())
                 .build();
 
         editalRepository.save(edital);
 
-        return saveEditalPdf(pdf, dto.title());
+        return saveEditalPdf(pdf, path);
     }
 
     public Optional<Resource> getEditalPdfByTitle(String title) throws IOException {
@@ -74,7 +73,7 @@ public class EditalController {
             title = title+".pdf";
         }
 
-        String filePath = uploadDir +"/"+ title;
+        String filePath = uploadDir + title;
         pdf.transferTo(new File(filePath));
 
         return Optional.of("Pdf File saved successfully");
@@ -82,11 +81,34 @@ public class EditalController {
 
     public Optional<List<EditalDTO>> getAllEditais() {
         List<Edital> editais = editalRepository.findAll();
+
         List<EditalDTO> dtos = editais.stream()
-                .map(ed -> new EditalDTO(ed.getTitle(), ed.getDescription()))
+                .map(ed -> new EditalDTO(ed.getTitle(),
+                        ed.getDescription(),
+                        ed.getAgency(),
+                        ed.getPathToPdfFile(),
+                        ed.getPublicationDate(),
+                        ed.getClosingDate()))
                 .toList();
 
         return Optional.of(dtos);
 
+    }
+
+    public Optional<EditalDTO> getEditalByTitleAndAgency(String title, String agency) throws NotFoundException {
+        Optional<Edital> edital = editalRepository.findByTitleAndAgency(title, agency);
+
+        if (edital.isEmpty()) {
+            throw new com.service.edital.edital_service.utils.NotFoundException("Edital not found");
+        }
+
+        EditalDTO dto = new EditalDTO(edital.get().getTitle(),
+                edital.get().getDescription(),
+                edital.get().getAgency(),
+                edital.get().getPathToPdfFile(),
+                edital.get().getPublicationDate(),
+                edital.get().getClosingDate());
+
+        return Optional.of(dto);
     }
 }

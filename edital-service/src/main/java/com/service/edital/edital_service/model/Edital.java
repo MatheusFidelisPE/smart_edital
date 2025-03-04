@@ -1,10 +1,11 @@
 package com.service.edital.edital_service.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -12,14 +13,16 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@IdClass(Key.class)
 public class Edital {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private String title;
+    @Id
+    private String agency;
     private String description;
     private String pathToPdfFile;
+    private LocalDate publicationDate;
+    private LocalDate closingDate;
 
 
 
