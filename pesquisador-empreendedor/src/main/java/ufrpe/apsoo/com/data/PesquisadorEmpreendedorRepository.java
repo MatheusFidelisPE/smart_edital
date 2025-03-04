@@ -1,6 +1,6 @@
-package com.data;
+package ufrpe.apsoo.com.data;
 
-import com.model.PesquisadorEmpreendedor;
+import ufrpe.apsoo.com.model.PesquisadorEmpreendedor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
