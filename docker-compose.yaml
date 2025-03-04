@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   editaldb:
     image: postgres:13
@@ -76,7 +74,7 @@ services:
       - EUREKA_ADDRESS_HOST=${EUREKA_ADDRESS_HOST}
       - PATH_TO_FILES=${PATH_TO_FILES}
     volumes:
-      - eureka-sd
+      - eureka-sd:/eureka-sd
       - gradle_cache_edital:/root/.gradle
   pesq_empre:
     build: ./pesquisador-empreendedor/
@@ -103,3 +101,4 @@ volumes:
   gradle_cache_pesq:
   gradle_cache_eureka:
   gradle_cache_llm:
+  eureka-sd:

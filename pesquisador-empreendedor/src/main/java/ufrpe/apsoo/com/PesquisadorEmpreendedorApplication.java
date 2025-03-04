@@ -1,4 +1,4 @@
-package com.pesquisador.empreendedor.pesquisador_empreendedor;
+package ufrpe.apsoo.com;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
