@@ -1,0 +1,323 @@
+openapi: 3.0.0
+info:
+  title: APSOO CRUD API
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+paths:
+  /api/pesquisador:
+    post:
+      summary: Create a PesquisadorEmpreendedor
+      requestBody:
+        description: PesquisadorEmpreendedor object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PesquisadorEmpreendedor'
+            examples:
+              example:
+                value:
+                  nomeCompleto: "John Doe"
+                  cpf: "12345678900"
+                  email: "johndoe@example.com"
+                  telefone: "555-1234"
+                  endereco: "123 Main St, City, Country"
+                  detalhesGraduacao: "Bachelor in Computer Science"
+                  detalhesPosGraduacao: "Master in Business Administration"
+                  expProfissional: "5 years of experience in research"
+                  curLates: "https://www.curriculolates.com/johndoe"
+                  expEmpreen: true
+                  interesseEmpresa: false
+                  interesseTransferenciaTecnologia: true
+                  disponibilidadeCapacitacao: false
+                  pesquisas: []
+      responses:
+        "201":
+          description: PesquisadorEmpreendedor created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PesquisadorEmpreendedor'
+    get:
+      summary: Get all PesquisadorEmpreendedor
+      responses:
+        "200":
+          description: A list of PesquisadorEmpreendedor
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PesquisadorEmpreendedor'
+  /api/pesquisador/{id}:
+    get:
+      summary: Get PesquisadorEmpreendedor by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the PesquisadorEmpreendedor to get
+      responses:
+        "200":
+          description: PesquisadorEmpreendedor found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PesquisadorEmpreendedor'
+        "404":
+          description: PesquisadorEmpreendedor not found
+    put:
+      summary: Update PesquisadorEmpreendedor by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the PesquisadorEmpreendedor to update
+      requestBody:
+        description: PesquisadorEmpreendedor object to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PesquisadorEmpreendedor'
+            examples:
+              example:
+                value:
+                  nomeCompleto: "John Doe"
+                  cpf: "12345678900"
+                  email: "johndoe@example.com"
+                  telefone: "555-1234"
+                  endereco: "123 Main St, City, Country"
+                  detalhesGraduacao: "Bachelor in Computer Science"
+                  detalhesPosGraduacao: "Master in Business Administration"
+                  expProfissional: "5 years of experience in research"
+                  curLates: "https://www.curriculolates.com/johndoe"
+                  expEmpreen: false
+                  interesseEmpresa: false
+                  interesseTransferenciaTecnologia: true
+                  disponibilidadeCapacitacao: false
+                  pesquisas:
+                    - id: 1
+                      titulo: "Exploring Emerging Technologies"
+                      description: "An in-depth analysis of new trends in technology and their impact."
+                      area: "Computer Science"
+                      maturidade: "Conceptual"
+                      impacto: "Medium"
+                      conexoesODS: "3, 9"
+      responses:
+        "200":
+          description: PesquisadorEmpreendedor updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PesquisadorEmpreendedor'
+    delete:
+      summary: Delete PesquisadorEmpreendedor by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the PesquisadorEmpreendedor to delete
+      responses:
+        "204":
+          description: PesquisadorEmpreendedor deleted successfully
+  /api/pesquisa:
+    post:
+      summary: Create a Pesquisa
+      requestBody:
+        description: Pesquisa object to be created
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pesquisa'
+            examples:
+              example:
+                value:
+                  titulo: "Exploring Emerging Technologies"
+                  description: "An in-depth analysis of new trends in technology and their impact."
+                  area: "Computer Science"
+                  maturidade: "Conceptual"
+                  impacto: "Medium"
+                  conexoesODS: "3, 9"
+                  pesquisadorEmpreendedor:
+                    id: 1
+      responses:
+        "201":
+          description: Pesquisa created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pesquisa'
+    get:
+      summary: Get all Pesquisa
+      responses:
+        "200":
+          description: A list of Pesquisa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Pesquisa'
+  /api/pesquisa/{id}:
+    get:
+      summary: Get Pesquisa by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the Pesquisa to get
+      responses:
+        "200":
+          description: Pesquisa found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pesquisa'
+        "404":
+          description: Pesquisa not found
+    put:
+      summary: Update Pesquisa by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the Pesquisa to update
+      requestBody:
+        description: Pesquisa object to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Pesquisa'
+            examples:
+              example:
+                value:
+                  titulo: "Exploring Emerging Technologies"
+                  description: "An in-depth analysis of new trends in technology and their impact."
+                  area: "Computer Science"
+                  maturidade: "Conceptual"
+                  impacto: "Medium"
+                  conexoesODS: "3, 11"
+      responses:
+        "200":
+          description: Pesquisa updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pesquisa'
+    delete:
+      summary: Delete Pesquisa by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the Pesquisa to delete
+      responses:
+        "204":
+          description: Pesquisa deleted successfully
+components:
+  schemas:
+    PesquisadorEmpreendedor:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nomeCompleto:
+          type: string
+          example: "John Doe"
+        cpf:
+          type: string
+          example: "12345678900"
+        email:
+          type: string
+          example: "johndoe@example.com"
+        telefone:
+          type: string
+          example: "555-1234"
+        endereco:
+          type: string
+          example: "123 Main St, City, Country"
+        detalhesGraduacao:
+          type: string
+          example: "Bachelor in Computer Science"
+        detalhesPosGraduacao:
+          type: string
+          example: "Master in Business Administration"
+        expProfissional:
+          type: string
+          example: "5 years of experience in research"
+        curLates:
+          type: string
+          example: "https://www.curriculolates.com/johndoe"
+        expEmpreen:
+          type: boolean
+          example: true
+        interesseEmpresa:
+          type: boolean
+          example: false
+        interesseTransferenciaTecnologia:
+          type: boolean
+          example: true
+        disponibilidadeCapacitacao:
+          type: boolean
+          example: false
+        pesquisas:
+          type: array
+          items:
+            $ref: '#/components/schemas/Pesquisa'
+      required:
+        - nomeCompleto
+        - cpf
+        - email
+        - telefone
+        - endereco
+    Pesquisa:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        titulo:
+          type: string
+          example: "Exploring Emerging Technologies"
+        description:
+          type: string
+          example: "An in-depth analysis of new trends in technology and their impact."
+        area:
+          type: string
+          example: "Computer Science"
+        maturidade:
+          type: string
+          example: "Conceptual"
+        impacto:
+          type: string
+          example: "Medium"
+        conexoesODS:
+          type: string
+          example: "3, 9"
+        pesquisadorEmpreendedor:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+      required:
+        - titulo
+        - description
+        - area
