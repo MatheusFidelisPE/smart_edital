@@ -1,10 +1,11 @@
-package com.controller;
+package ufrpe.apsoo.com.controller;
 
-import com.model.Pesquisa;
-import com.service.PesquisaService;
+import ufrpe.apsoo.com.model.Pesquisa;
+import ufrpe.apsoo.com.service.PesquisaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
