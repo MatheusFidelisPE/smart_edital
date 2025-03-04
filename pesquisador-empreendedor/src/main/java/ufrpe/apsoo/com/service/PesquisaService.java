@@ -1,7 +1,7 @@
-package com.service;
+package ufrpe.apsoo.com.service;
 
-import com.model.Pesquisa;
-import com.data.PesquisaRepository;
+import ufrpe.apsoo.com.model.Pesquisa;
+import ufrpe.apsoo.com.data.PesquisaRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;

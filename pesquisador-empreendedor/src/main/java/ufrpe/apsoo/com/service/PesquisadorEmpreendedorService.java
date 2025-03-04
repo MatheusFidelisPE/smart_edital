@@ -1,8 +1,8 @@
-package com.service;
+package ufrpe.apsoo.com.service;
 
 
-import com.model.PesquisadorEmpreendedor;
-import com.data.PesquisadorEmpreendedorRepository;
+import ufrpe.apsoo.com.model.PesquisadorEmpreendedor;
+import ufrpe.apsoo.com.data.PesquisadorEmpreendedorRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
