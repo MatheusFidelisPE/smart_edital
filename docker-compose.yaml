@@ -13,9 +13,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-  pesquisador_empreendedor_db:
+  pesquisadorempreendedordb:
     image: postgres:13
-    container_name: pesquisador_empreendedor_db
+    container_name: pesquisadorempreendedordb
     environment:
       POSTGRES_USER: ${POSTGRES_PESQUISADOR_EMPREENDEDOR_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PESQUISADOR_EMPREENDEDOR_PASSWORD}
@@ -82,7 +82,7 @@ services:
     depends_on:
       eureka:
         condition: service_healthy
-      pesquisador_empreendedor_db:
+      pesquisadorempreendedordb:
         condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_PESQUISADOR_EMPREENDEDOR_URL}
