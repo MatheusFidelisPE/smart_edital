@@ -14,4 +14,4 @@ RUN ./gradlew build -x test
 
 EXPOSE 8761
 
-ENTRYPOINT ["java", "-jar", "build/libs/eureka-sd-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/eureka-sd-0.0.1-SNAPSHOT.jar", "--server.port=8761"]
