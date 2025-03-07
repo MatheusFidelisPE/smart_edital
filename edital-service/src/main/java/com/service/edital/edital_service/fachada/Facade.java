@@ -34,8 +34,8 @@ public class Facade {
         // TODO
     }
 
-    public Resource getEditalPdfByTitle(String title) throws IOException {
-        Optional<Resource> file = controllerEdital.getEditalPdfByTitle(title);
+    public Resource getEditalPdfByTitle(String title, String agency) throws IOException {
+        Optional<Resource> file = controllerEdital.getEditalPdfByTitleAndAgency(title, agency);
 
         return file.orElseThrow();
     }
@@ -48,5 +48,13 @@ public class Facade {
     public EditalDTO getEditalByTitleAndAgency(String title, String agency) throws NotFoundException {
         Optional<EditalDTO> edital = controllerEdital.getEditalByTitleAndAgency(title, agency);
         return edital.get();
+    }
+
+    public List<EditalDTO> getNewers() {
+        return controllerEdital.getNewers();
+    }
+
+    public Object updateTrlEdital(EditalDTO editalDTO, String trlValue) {
+        return controllerEdital.updateEdital(editalDTO, trlValue);
     }
 }

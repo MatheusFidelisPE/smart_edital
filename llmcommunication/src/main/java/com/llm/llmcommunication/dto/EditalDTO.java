@@ -1,9 +1,8 @@
-package com.service.edital.edital_service.dto;
+package com.llm.llmcommunication.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
-
 
 public record EditalDTO(String title,
                         String description,
@@ -12,8 +11,7 @@ public record EditalDTO(String title,
                         @JsonFormat(pattern = "dd/MM/yyyy")
                         LocalDate publicationDate,
                         @JsonFormat(pattern = "dd/MM/yyyy")
-                        LocalDate closingDate,
-                        String classificationTrl) {
+                        LocalDate closingDate) {
 
 
 }

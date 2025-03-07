@@ -23,7 +23,8 @@ public class Edital {
     private String pathToPdfFile;
     private LocalDate publicationDate;
     private LocalDate closingDate;
-
+    private Boolean isClassified;
+    private String classificationTrl;
 
 
 }

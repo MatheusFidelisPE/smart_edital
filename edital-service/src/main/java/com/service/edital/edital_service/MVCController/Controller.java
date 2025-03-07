@@ -53,10 +53,10 @@ public class Controller {
 
     }
     @GetMapping(value = "/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<Resource> getEditalPdf(@RequestParam String title) {
+    public ResponseEntity<Resource> getEditalPdf(@RequestParam String title, @RequestParam String agency) {
         Resource pdfFile;
         try {
-            pdfFile = facade.getEditalPdfByTitle(title);
+            pdfFile = facade.getEditalPdfByTitle(title, agency);
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_PDF)
                     .body(pdfFile);
@@ -66,9 +66,19 @@ public class Controller {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    @GetMapping(value="/newers")
+    public ResponseEntity<?> getNewers() {
+        List<EditalDTO> dtos = facade.getNewers();
+        return new ResponseEntity<>(dtos, HttpStatus.OK);
+    }
+    @PutMapping(value = "update/{trl}")
+    public ResponseEntity<?> updateEdital(@RequestBody EditalDTO editalDTO, @PathVariable("trl") String trlValue){
+        return ResponseEntity.ok(facade.updateTrlEdital(editalDTO, trlValue));
+    }
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
         return ResponseEntity.status(404).body(ex.getMessage());
     }
+
+
 }

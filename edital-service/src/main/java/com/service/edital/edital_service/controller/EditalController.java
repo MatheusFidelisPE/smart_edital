@@ -48,17 +48,56 @@ public class EditalController {
         return saveEditalPdf(pdf, path);
     }
 
-    public Optional<Resource> getEditalPdfByTitle(String title) throws IOException {
-        if (!title.endsWith(".pdf")){
-            title = title+".pdf";
+    public Optional<Resource> getEditalPdfByTitleAndAgency(String title, String agency) throws IOException {
+
+        Optional<Edital> opEdital = editalRepository.findByTitleAndAgency(title, agency);
+
+        Edital ed = opEdital.orElseThrow();
+        String fileName = ed.getPathToPdfFile();
+
+        if (!fileName.endsWith(".pdf")) {
+            fileName = fileName + ".pdf";
         }
 
-        File file = new File(pathToFiles+title);
+        File file = new File(pathToFiles+fileName);
         var path = Paths.get(file.getAbsolutePath());
         var resource = new ByteArrayResource(Files.readAllBytes(path));
         return Optional.of(resource);
+    }
 
+    public Optional<List<EditalDTO>> getAllEditais() {
+        List<Edital> editais = editalRepository.findAll();
 
+        List<EditalDTO> dtos = editais.stream()
+                .map(ed -> new EditalDTO(ed.getTitle(),
+                        ed.getDescription(),
+                        ed.getAgency(),
+                        ed.getPathToPdfFile(),
+                        ed.getPublicationDate(),
+                        ed.getClosingDate(),
+                        ed.getClassificationTrl()))
+                .toList();
+
+        return Optional.of(dtos);
+
+    }
+
+    public Optional<EditalDTO> getEditalByTitleAndAgency(String title, String agency) throws NotFoundException {
+        Optional<Edital> edital = editalRepository.findByTitleAndAgency(title, agency);
+
+        if (edital.isEmpty()) {
+            throw new com.service.edital.edital_service.utils.NotFoundException("Edital not found");
+        }
+
+        EditalDTO dto = new EditalDTO(edital.get().getTitle(),
+                edital.get().getDescription(),
+                edital.get().getAgency(),
+                edital.get().getPathToPdfFile(),
+                edital.get().getPublicationDate(),
+                edital.get().getClosingDate(),
+                edital.get().getClassificationTrl());
+
+        return Optional.of(dto);
     }
 
     private Optional<String> saveEditalPdf(MultipartFile pdf, String title) throws IOException {
@@ -79,36 +118,43 @@ public class EditalController {
         return Optional.of("Pdf File saved successfully");
     }
 
-    public Optional<List<EditalDTO>> getAllEditais() {
-        List<Edital> editais = editalRepository.findAll();
+    public List<EditalDTO> getNewers() {
+        Optional<List<Edital>> editaisNovos = editalRepository.findnewers();
 
-        List<EditalDTO> dtos = editais.stream()
+        if(editaisNovos.isEmpty()){
+            return List.of();
+        }
+        List<EditalDTO> dtos = editaisNovos.get().stream()
                 .map(ed -> new EditalDTO(ed.getTitle(),
                         ed.getDescription(),
                         ed.getAgency(),
                         ed.getPathToPdfFile(),
                         ed.getPublicationDate(),
-                        ed.getClosingDate()))
+                        ed.getClosingDate(),
+                        ed.getClassificationTrl()))
                 .toList();
 
-        return Optional.of(dtos);
-
+       return dtos;
     }
 
-    public Optional<EditalDTO> getEditalByTitleAndAgency(String title, String agency) throws NotFoundException {
-        Optional<Edital> edital = editalRepository.findByTitleAndAgency(title, agency);
+    public Object updateEdital(EditalDTO editalDTO, String trlValue) {
+        Optional<Edital> optEdital = editalRepository.findByTitleAndAgency(editalDTO.title(), editalDTO.agency());
 
-        if (edital.isEmpty()) {
-            throw new com.service.edital.edital_service.utils.NotFoundException("Edital not found");
+        if(optEdital.isEmpty()){
+            throw new NotFoundException();
         }
 
-        EditalDTO dto = new EditalDTO(edital.get().getTitle(),
-                edital.get().getDescription(),
-                edital.get().getAgency(),
-                edital.get().getPathToPdfFile(),
-                edital.get().getPublicationDate(),
-                edital.get().getClosingDate());
+        Edital edital = optEdital.get();
+        edital.setClassificationTrl(trlValue);
+        edital.setIsClassified(true);
 
-        return Optional.of(dto);
+        editalRepository.save(edital);
+        return new EditalDTO(edital.getTitle(),
+                edital.getDescription(),
+                edital.getAgency(),
+                edital.getPathToPdfFile(),
+                edital.getPublicationDate(),
+                edital.getClosingDate(),
+                edital.getClassificationTrl());
     }
 }
