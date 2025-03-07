@@ -28,12 +28,12 @@ public class Controller {
                                           @RequestParam("pdf") MultipartFile editalDTOPdf) {
 
         try {
-            facade.createEdital(editalDTODados, editalDTOPdf);
+            EditalDTO dtoSaved = facade.createEdital(editalDTODados, editalDTOPdf);
+            return new ResponseEntity<>(dtoSaved, HttpStatus.CREATED);
         } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
     @GetMapping(value="/", produces = "application/json")
@@ -66,15 +66,23 @@ public class Controller {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping(value="/newers")
     public ResponseEntity<?> getNewers() {
         List<EditalDTO> dtos = facade.getNewers();
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
+    // Para o llmcommunication atualizar
     @PutMapping(value = "update/{trl}")
     public ResponseEntity<?> updateEdital(@RequestBody EditalDTO editalDTO, @PathVariable("trl") String trlValue){
         return ResponseEntity.ok(facade.updateTrlEdital(editalDTO, trlValue));
     }
+
+    @GetMapping(value = "/recommendation")
+    public ResponseEntity<List<EditalDTO>> getRecommendations(@RequestParam("trl") String trlValue, @RequestParam("area") String area){
+        return ResponseEntity.ok(facade.getRecommendations(trlValue, area));
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
         return ResponseEntity.status(404).body(ex.getMessage());

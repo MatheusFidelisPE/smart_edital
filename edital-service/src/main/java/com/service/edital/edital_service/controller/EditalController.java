@@ -30,7 +30,7 @@ public class EditalController {
         this.editalRepository = editalRepository;
     }
 
-    public Optional<?> createEdital(EditalDTO dto, MultipartFile pdf) throws IOException {
+    public Optional<EditalDTO> createEdital(EditalDTO dto, MultipartFile pdf) throws IOException {
         String path = String.format("%s_%s", dto.title(), dto.agency());
         path = path.replaceAll(" ", "-");
 
@@ -44,8 +44,8 @@ public class EditalController {
                 .build();
 
         editalRepository.save(edital);
-
-        return saveEditalPdf(pdf, path);
+        saveEditalPdf(pdf, path);
+        return Optional.of(dto);
     }
 
     public Optional<Resource> getEditalPdfByTitleAndAgency(String title, String agency) throws IOException {
@@ -100,7 +100,7 @@ public class EditalController {
         return Optional.of(dto);
     }
 
-    private Optional<String> saveEditalPdf(MultipartFile pdf, String title) throws IOException {
+    private Optional<String> saveEditalPdf(MultipartFile pdf, String fileName) throws IOException {
         // Salvar o arquivo (opcional)
         String uploadDir = pathToFiles;
         File directory = new File(uploadDir);
@@ -108,11 +108,11 @@ public class EditalController {
         if (!directory.exists()) {
             directory.mkdirs(); // Criar diretório se não existir
         }
-        if(!title.endsWith(".pdf")){
-            title = title+".pdf";
+        if(!fileName.endsWith(".pdf")){
+            fileName = fileName+".pdf";
         }
 
-        String filePath = uploadDir + title;
+        String filePath = uploadDir + fileName;
         pdf.transferTo(new File(filePath));
 
         return Optional.of("Pdf File saved successfully");
@@ -156,5 +156,27 @@ public class EditalController {
                 edital.getPublicationDate(),
                 edital.getClosingDate(),
                 edital.getClassificationTrl());
+    }
+
+    public List<EditalDTO> getRecommendations(String trlValue, String area) {
+        Optional<List<Edital>> optEditais = editalRepository.findByTrlValueAndArea(trlValue, area);
+
+
+        List<EditalDTO> dtos = optEditais.orElseThrow().stream()
+                .map(ed -> new EditalDTO(ed.getTitle(),
+                        ed.getDescription(),
+                        ed.getAgency(),
+                        ed.getPathToPdfFile(),
+                        ed.getPublicationDate(),
+                        ed.getClosingDate(),
+                        ed.getClassificationTrl()))
+                .toList();
+
+        return dtos;
+
+
+
+
+
     }
 }

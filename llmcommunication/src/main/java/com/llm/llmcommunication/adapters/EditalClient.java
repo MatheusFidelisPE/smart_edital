@@ -9,7 +9,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.http.HttpClient;
 import java.util.List;
 
 @Component
@@ -24,8 +23,6 @@ public class EditalClient {
     public EditalClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
-
-
     public List<EditalDTO> getAllEditais() {
         String url = String.format("http://%s/edital/", editalServiceUrl);
         ResponseEntity<List<EditalDTO>> response = restTemplate.exchange(
@@ -36,7 +33,6 @@ public class EditalClient {
                 });
         return response.getBody();
     }
-
     public Resource getPdfFile(String title, String agency){
 
         String url = String.format("http://%s/edital/pdf?title=%s&agency=%s", editalServiceUrl, title, agency);
@@ -49,8 +45,6 @@ public class EditalClient {
                 });
         return response.getBody();
     }
-
-
     public List<EditalDTO> getNewrsEditais() {
         String url = String.format("http://%s/edital/newers", editalServiceUrl);
         ResponseEntity<List<EditalDTO>> response = restTemplate.exchange(
@@ -77,4 +71,17 @@ public class EditalClient {
         );
         return response;
     }
+    public EditalDTO getEdital(String agency, String title) {
+
+        String url = String.format("http://%s/edital/find?title=%s&agency=%s", editalServiceUrl, title, agency);
+        ResponseEntity<EditalDTO> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<EditalDTO>() {
+                });
+
+        return response.getBody();
+    }
+
 }

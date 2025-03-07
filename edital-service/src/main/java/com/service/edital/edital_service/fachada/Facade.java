@@ -19,11 +19,11 @@ public class Facade {
     private final EditalController controllerEdital;
 
     @Autowired
-    public Facade(EditalController controllerEdital) {
+    public Facade(EditalController controllerEdital, EditalController editalController) {
         this.controllerEdital = controllerEdital;
     }
-    public void createEdital(EditalDTO dados, MultipartFile pdf) throws IOException {
-        controllerEdital.createEdital(dados, pdf);
+    public EditalDTO createEdital(EditalDTO dados, MultipartFile pdf) throws IOException {
+        return controllerEdital.createEdital(dados, pdf).orElseThrow();
     }
 
     public void getEdital() {
@@ -56,5 +56,9 @@ public class Facade {
 
     public Object updateTrlEdital(EditalDTO editalDTO, String trlValue) {
         return controllerEdital.updateEdital(editalDTO, trlValue);
+    }
+
+    public List<EditalDTO> getRecommendations(String trlValue, String area) {
+        return controllerEdital.getRecommendations(trlValue, area);
     }
 }

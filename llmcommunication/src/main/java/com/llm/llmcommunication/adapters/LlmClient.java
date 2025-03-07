@@ -55,4 +55,24 @@ public class LlmClient {
         String prompt = "Classifique o seguinte edital de acordo com o nível de maturidade tecnológica (TRL), considerando sua descrição e características. Responda apenas com o número do TRL correspondente. Responda com 'TRL 1' ou 'TRL 2' apenas isso. Responda apenas o TRL <numero> que o edital está contemplando.";
         return prompt;
     }
+
+    public String chatEdital(String prompt, byte[] pdf) {
+        String url = String.format("%s%s", urlGemini, token);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(java.net.URI.create(url))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(jsonFormatter(prompt, pdf)))
+                .build();
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return response.body();
+
+    }
 }

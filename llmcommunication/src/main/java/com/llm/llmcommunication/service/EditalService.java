@@ -38,11 +38,22 @@ public class EditalService {
     public String classifyEditalFile(String title, String agency) throws IOException {
         Resource pdf = editalClient.getPdfFile(title, agency);
         String classifiedEdital = llmClient.classifyEdital("Classifique o documento nesse arquivo em [Documento pessoal, Documento Organizacional ou Documento Residêncial]",pdf.getContentAsByteArray());
+        String classification = getClassification(classifiedEdital);
+        EditalDTO editalDTO = editalClient.getEdital(agency, title);
 
-        return getClissification(classifiedEdital);
+        editalClient.updatePdfFile(editalDTO, classification);
+        return classification;
     }
 
-    private String getClissification(String json) throws JsonProcessingException {
+    public String chat(String quest, String editalTitle, String agency) throws IOException {
+        Resource pdf = editalClient.getPdfFile(editalTitle, agency);
+        String prompt = String.format("Responda a seguinte pergunta com base no edital que estou te enviando\nPergunta: %s", quest);
+        String body = llmClient.chatEdital(prompt,pdf.getContentAsByteArray());
+
+        return getClassification(body);
+    }
+
+    private String getClassification(String json) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 
         JsonNode rootNode = objectMapper.readTree(json);

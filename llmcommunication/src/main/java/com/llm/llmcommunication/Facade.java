@@ -1,5 +1,6 @@
 package com.llm.llmcommunication;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.llm.llmcommunication.dto.EditalDTO;
 import com.llm.llmcommunication.adapters.EditalClient;
 import com.llm.llmcommunication.rotinas.SchedulerEdital;
@@ -15,6 +16,7 @@ public class Facade {
 
     private final EditalService editalService;
     private final SchedulerEdital schedulerEdital;
+
     public Facade(EditalService editalService, SchedulerEdital schedulerEdital) {
         this.editalService = editalService;
         this.schedulerEdital = schedulerEdital;
@@ -40,5 +42,9 @@ public class Facade {
     public Boolean testNew() {
         schedulerEdital.classifyEdital();
         return true;
+    }
+
+    public String chat(String quest, String editalTitle, String agency) throws IOException {
+        return editalService.chat(quest, editalTitle, agency);
     }
 }

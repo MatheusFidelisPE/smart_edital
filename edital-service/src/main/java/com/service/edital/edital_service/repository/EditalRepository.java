@@ -18,4 +18,9 @@ public interface EditalRepository extends JpaRepository<Edital, Key> {
 
     @Query(value = "SELECT * FROM edital where is_classified = false", nativeQuery = true)
     Optional<List<Edital>> findnewers();
+
+    @Query(value = "select ed.description, ed.path_to_pdf_file, ed.title, ed.agency, ed.closing_date, ed.publication_date, ed.is_classified, ed.classification_trl FROM edital as ed JOIN area AS ar ON ed.title = ar.title AND ed.agency = ar.agency  WHERE ed.classification_trl LIKE ?1 AND ar.area like ?2;",
+            nativeQuery = true)
+    Optional<List<Edital>> findByTrlValueAndArea(String trlValue, String area);
+
 }

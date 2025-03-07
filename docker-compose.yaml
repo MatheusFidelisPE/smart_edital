@@ -56,6 +56,7 @@ services:
     environment:
       - CHAVE_API_GEMINI=${CHAVE_API_GEMINI}
       - EUREKA_ADDRESS_HOST=${EUREKA_ADDRESS_HOST}
+      - EUREKA_CLIENT_EDITAL=${EUREKA_CLIENT_EDITAL}
     volumes:
       - gradle_cache_llm:/root/.gradle
   edital:
@@ -91,6 +92,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PESQUISADOR_EMPREENDEDOR_PASSWORD}
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - EUREKA_ADDRESS_HOST=${EUREKA_ADDRESS_HOST}
+      - EUREKA_CLIENT_EDITAL=${EUREKA_CLIENT_EDITAL}
     volumes:
       - gradle_cache_pesq:/root/.gradle
   

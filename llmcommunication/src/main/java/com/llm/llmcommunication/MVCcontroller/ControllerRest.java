@@ -1,12 +1,11 @@
 package com.llm.llmcommunication.MVCcontroller;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.llm.llmcommunication.Facade;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -51,5 +50,16 @@ public class ControllerRest {
     public ResponseEntity<?> testeNew() {
         return ResponseEntity.ok(facade.testNew());
     }
+    @GetMapping(value ="/chat")
+    public ResponseEntity<?> chat(@RequestParam("quest") String quest, @RequestParam("editalTitle") String editalTitle, @RequestParam("agency") String agency){
+        try {
+            return ResponseEntity.ok(facade.chat(quest, editalTitle, agency));
+        } catch (JsonProcessingException e) {
+            return new ResponseEntity<>("Json de resposta do LLM não é compatível", HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
+            return new ResponseEntity<>("Erro na conversão do pdf para byte", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 }
